@@ -37,14 +37,14 @@ System.out.println("homeDir="+homeDir);
 
 
 		//        dynare412Lexer lex = new dynare412Lexer(new ANTLRFileStream("__Test___input.txt", "UTF8"));
-        dynare412Lexer lex = new dynare412Lexer(new ANTLRFileStream(homeDir+"RES2/conferences/sce11/dynareExamples/examples/AltEx1.mod", "UTF8"));
+        dynare412Lexer lex = new dynare412Lexer(new ANTLRFileStream("./AltEx1.mod", "UTF8"));
         CommonTokenStream tokens = new CommonTokenStream(lex);
 
         g = new dynare412Parser(tokens);
 		/*
 whttp://java.sun.com/webservices/docs/1.6/tutorial/doc/JAXBUsing3.html
 		 */
-		ANTLRFileStream theInput = new ANTLRFileStream(homeDir+"RES2/conferences/sce11/dynareExamples/examples/AltEx1.mod");
+		ANTLRFileStream theInput = new ANTLRFileStream("./AltEx1.mod");
 		dynare412Lexer theLexer = new dynare412Lexer(theInput);
         CommonTokenStream theTokens = new CommonTokenStream(theLexer);
         dynare412Parser theParser  = new dynare412Parser(theTokens);
@@ -71,7 +71,7 @@ CommonTreeNodeStream nodes = new CommonTreeNodeStream(tree);
 	
 	
 	dynare412Tree.statement_list_return statement_listTree=walker.statement_list(equations,symtab,paramType,llVarType,innovType);
-	 theInput = new ANTLRFileStream(homeDir+"RES2/conferences/sce11/dynareExamples/examples/AltEx1.mod");
+	 theInput = new ANTLRFileStream("./AltEx1.mod");
 	 theLexer = new dynare412Lexer(theInput);
      theTokens = new CommonTokenStream(theLexer);
      theParser  = new dynare412Parser(theTokens);

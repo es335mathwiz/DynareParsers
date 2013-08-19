@@ -25,8 +25,8 @@ public class DynareModelTest extends TestCase {
 String homeDir;
 if(osStr.equals("Linux")) homeDir="/msu/home/m1gsa00/"; else homeDir="g:/";
 System.out.println("homeDir="+homeDir);
- //       dynare412Lexer lex = new dynare412Lexer(new ANTLRFileStream("/msu/res2/m1gsa00/dynareAntlr/src/test/example1.mod"));
-	       dynare412Lexer lex = new dynare412Lexer(new ANTLRFileStream(homeDir+"RES2/conferences/sce11/dynareExamples/examples/AltEx1.mod"));
+ //       dynare412Lexer lex = new dynare412Lexer(new ANTLRFileStream("./example1.mod"));
+	       dynare412Lexer lex = new dynare412Lexer(new ANTLRFileStream("./AltEx1.mod"));
 
 	       CommonTokenStream tokens = new CommonTokenStream(lex);
 
@@ -34,9 +34,9 @@ System.out.println("homeDir="+homeDir);
 		/*
 whttp://java.sun.com/webservices/docs/1.6/tutorial/doc/JAXBUsing3.html
 		 */
-//		ANTLRFileStream theInput = new ANTLRFileStream("/msu/res2/m1gsa00/dynareAntlr/src/test/example1.mod");
- //   	ANTLRFileStream theInput = new ANTLRFileStream("g:/RES2/dynareAntlr/src/test/example1.mod");
-        ANTLRFileStream theInput = new ANTLRFileStream(homeDir+"RES2/conferences/sce11/dynareExamples/examples/AltEx1.mod");   	
+//		ANTLRFileStream theInput = new ANTLRFileStream("./example1.mod");
+ //   	ANTLRFileStream theInput = new ANTLRFileStream("./example1.mod");
+        ANTLRFileStream theInput = new ANTLRFileStream("./AltEx1.mod");   	
 		dynare412Lexer theLexer = new dynare412Lexer(theInput);
         CommonTokenStream theTokens = new CommonTokenStream(theLexer);
         dynare412Parser theParser  = new dynare412Parser(theTokens);
@@ -63,8 +63,8 @@ CommonTreeNodeStream nodes = new CommonTreeNodeStream(tree);
 	/*
 	
 	dynare412Tree.statement_list_return statement_listTree=walker.statement_list(equations,symtab,paramType,llVarType,innovType);
-//	 theInput = new ANTLRFileStream("/msu/res2/m1gsa00/dynareAntlr/src/test/example1.mod");
-	 theInput = new ANTLRFileStream("g:/RES2/dynareAntlr/src/test/example1.mod");
+//	 theInput = new ANTLRFileStream("./example1.mod");
+	 theInput = new ANTLRFileStream("./example1.mod");
 	 theLexer = new dynare412Lexer(theInput);
      theTokens = new CommonTokenStream(theLexer);
      theParser  = new dynare412Parser(theTokens);
