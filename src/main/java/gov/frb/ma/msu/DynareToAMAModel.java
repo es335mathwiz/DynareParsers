@@ -126,7 +126,7 @@ mrshllr.marshal( statement_list, new FileWriter(amaModFName) );
 
 	public DynareToAMAModel(String modFName,String amaModFName,String strIndx) throws Exception{
 
-	this(modFName,amaModFName,strIndx,".");
+	this(modFName,amaModFName,strIndx,"./");
 
 	
 	String current = new java.io.File( "." ).getCanonicalPath();
