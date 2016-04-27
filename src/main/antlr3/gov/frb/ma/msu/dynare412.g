@@ -58,7 +58,7 @@ LINE_COMMENT
 //   :{false}?   ~('\n'|'\r')+  
 //	;
 
-SEMI : ';';
+SEMI : (';'|';;');
 COMMA : ',';
 
 VAR : 'var' ;
@@ -130,6 +130,9 @@ ATANH : 'atanh';
 SQRT : 'sqrt';
 MAX : 'max';
 MIN : 'min';
+NOPRINT : 'noprint';
+NOFUNCTIONS : 'nofunctions';
+NOCORR : 'nocorr';
 MODE_FILE
 	:	'mode_file';
 NAN_CONSTANT : 'nan';
@@ -527,8 +530,8 @@ stoch_simul_options : o_dr_algo
  //                   | o_replic
                     | o_drop
  //                   | o_ar
-//                    | o_nocorr
-//                    | o_nofunctions
+                    | o_nocorr
+                    | o_nofunctions
  //                   | o_nomoments
 //                    | o_nograph
                     | o_irf
@@ -540,7 +543,7 @@ stoch_simul_options : o_dr_algo
  //                   | o_simul_seed
  //                   | o_qz_criterium
   //                  | o_print
- //                   | o_noprint
+                    | o_noprint
  //                   | o_aim_solver
  //                   | o_partial_information
   //                  | o_conditional_variance_decomposition
@@ -548,6 +551,9 @@ stoch_simul_options : o_dr_algo
  //                 | o_pruning
              ;
  
+o_nocorr : NOCORR ;
+o_noprint : NOPRINT ;
+o_nofunctions : NOFUNCTIONS ;
 o_drop : DROP EQUAL INT_NUMBER ;
 o_dr_algo : DR_ALGO EQUAL INT_NUMBER ;
 o_irf : IRF EQUAL INT_NUMBER ;
@@ -634,7 +640,7 @@ model : MODEL^ SEMI!
 
 model_var :  NAME OPENPAREN MINUS INT_NUMBER CLOSEPAREN->^(AModelVarOrParam NAME UMINUS INT_NUMBER)
         |NAME OPENPAREN PLUS? INT_NUMBER CLOSEPAREN->^(AModelVarOrParam NAME UPLUS INT_NUMBER)            ;
-signed_integer : PLUS INT_NUMBER->^(INT_NUMBER)
+signed_integer : PLUS INT_NUMBER->^(UPLUS INT_NUMBER)
                | MINUS INT_NUMBER->^(UMINUS INT_NUMBER)
   //             | INT_NUMBER->^(INT_NUMBER)
                ;
@@ -646,11 +652,14 @@ mult	:	factor ((DIVIDE^|TIMES^) factor)*;
 factor 	:	primary (POWER^ factor)?;
 primary	:	element;
 element	:	FLOAT_NUMBER|model_var|INT_NUMBER
-	|	MINUS NAME->^(UMINUS ^(AModelVarOrParam NAME))
+//	|	MINUS NAME->^(UMINUS ^(AModelVarOrParam NAME))
 	| MINUS element->^(UMINUS element)
+	| PLUS element->^(UPLUS element)
 	|		OPENPAREN expr CLOSEPAREN ->expr
 		|MINUS		OPENPAREN expr CLOSEPAREN ->^(UMINUS expr)
+		|PLUS		OPENPAREN expr CLOSEPAREN ->^(UPLUS expr)
 	|NAME->^(AModelVarOrParam NAME)
+|MAX^ OPENPAREN! expr COMMA expr CLOSEPAREN!
 |LOG^ OPENPAREN! expr CLOSEPAREN!
 |LOG10^ OPENPAREN! expr CLOSEPAREN!
 |LN^ OPENPAREN! expr CLOSEPAREN!

@@ -206,6 +206,7 @@ expression returns [String expStr]
 	:	 theStr=expr[equations]{$expStr=$theStr.text;};
 
 begLeftFunc returns [String expStr]: EXP {$expStr="exp";}
+	| MAX {$expStr="Max";}
 	| LOG {$expStr="Log";}
 	| LOG10 {$expStr="Log10";}
 	| SIN {$expStr="Sin";}
@@ -287,6 +288,8 @@ expr[List<String> equations] returns [String str]	:	^(PLUS ex1=expr[equations] e
 {$str="("+ $ex1.str+"^"+ $ex2.str+")";}
 |^(UMINUS  ex=expr[equations])
 {$str="(-"+ $ex.str+")";}
+|^(UPLUS  ex=expr[equations])
+{$str="(+"+ $ex.str+")";}
 |prim=element
 {$str=$prim.str;}
 ;
@@ -316,6 +319,7 @@ if(symtab.symbols.get($vn.text).getType()==llVar)
 }else{
 $str=$vn.text;
 }}
+|^(MAX  ex1=expr[equations] COMMA ex2=expr[equations]){$str="Max["+$ex1.str+ ","+$ex2.str+"]";}
 |^(LOG  ex=expr[equations]){$str="Log["+$ex.str+"]";}
 |^(LOG10  ex=expr[equations]){$str="Log[10,"+$ex.str+"]";}
 |^(LN  ex=expr[equations]){$str="Log["+$ex.str+"]";}
