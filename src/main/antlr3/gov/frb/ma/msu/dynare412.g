@@ -15,6 +15,7 @@ AShockVar;
 AShockList;
 ACorr;
 AnEquationList;
+//FPMantissaExp;
 }
 @header
 {
@@ -57,6 +58,28 @@ LINE_COMMENT
 //notDynareCode
 //   :{false}?   ~('\n'|'\r')+  
 //	;
+
+fragment
+FLOAT_NUMBERNoExp  : 
+((((('0'..'9')*'.'('0'..'9')+) |(('0'..'9')+'.'))));
+
+fragment
+Exponent : ENotator ( ('+'|'-')? ('0'..'9')+) ;
+
+//aFloatNumber : 
+//FLOAT_NUMBERNoExp ->^(FPMantissaExp FLOAT_NUMBERNoExp)
+//|(FLOAT_NUMBERNoExp Exponent)->^(FPMantissaExp FLOAT_NUMBERNoExp  Exponent) ;
+
+fragment
+ENotator : ('e'|'E');
+
+
+
+AFloatNumber : 
+FLOAT_NUMBERNoExp Exponent?
+ ;
+
+
 
 SEMI : (';'|';;');
 COMMA : ',';
@@ -187,6 +210,9 @@ OBSERVATION_TRENDS
 	UNIT_ROOT_VARS: 'unit_root_vars';
 	MH_DROP:
 	'mh_drop';
+
+// isn't ther a right paren missing?
+
 NAME : Letter (Letter|JavaIDDigit)* TRANSP?
 //{stringOK=false;System.out.println("NAME setting false");};
 
@@ -202,14 +228,8 @@ JavaIDDigit : '0'..'9'|'_';
 
 
 
-// isn't ther a right paren missing?
-FLOAT_NUMBER  : (((('0'..'9')*'.'('0'..'9')+) |(('0'..'9')+'.'))
-(('e'|'E'|'d'|'D')('-'|'+')?('0'..'9')+)?) |
-(('0'..'9')+(('e'|'E'|'d'|'D')('-'|'+')?('0'..'9')+));
 
 
-fragment
-Exponent : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
 
 fragment
 FloatTypeSuffix : ('f'|'F'|'d'|'D') ;
@@ -482,7 +502,7 @@ var_list_noTex :
 
 
 number : INT_NUMBER
-       | FLOAT_NUMBER
+       | AFloatNumber
        ;
 
 
@@ -598,7 +618,7 @@ o_minimal_solving_periods : MINIMAL_SOLVING_PERIODS EQUAL non_negative_number ;
                                           
 o_stack_solve_algo : STACK_SOLVE_ALGO EQUAL INT_NUMBER ;
 non_negative_number : INT_NUMBER
-                    | FLOAT_NUMBER
+                    | AFloatNumber
                     ;
 
 o_order : ORDER EQUAL INT_NUMBER ;
@@ -638,6 +658,8 @@ model : MODEL^ SEMI!
 
 
 
+
+
 model_var :  NAME OPENPAREN MINUS INT_NUMBER CLOSEPAREN->^(AModelVarOrParam NAME UMINUS INT_NUMBER)
         |NAME OPENPAREN PLUS? INT_NUMBER CLOSEPAREN->^(AModelVarOrParam NAME UPLUS INT_NUMBER)            ;
 signed_integer : PLUS INT_NUMBER->^(UPLUS INT_NUMBER)
@@ -651,7 +673,10 @@ expr	:	mult ((PLUS^|MINUS^) mult )*;
 mult	:	factor ((DIVIDE^|TIMES^) factor)*;
 factor 	:	primary (POWER^ factor)?;
 primary	:	element;
-element	:	FLOAT_NUMBER|model_var|INT_NUMBER
+element	:	
+AFloatNumber
+|model_var
+|INT_NUMBER
 //	|	MINUS NAME->^(UMINUS ^(AModelVarOrParam NAME))
 	| MINUS element->^(UMINUS element)
 	| PLUS element->^(UPLUS element)
@@ -799,7 +824,7 @@ unaryExpressionNotPlusMinus
 
 literal 
     :   INT_NUMBER (COLON INT_NUMBER)?
-    |FLOAT_NUMBER 
+    |AFloatNumber 
     | matExpression TRANSP?
     |   booleanLiteral
     |   'null'

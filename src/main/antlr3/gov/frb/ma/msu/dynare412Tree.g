@@ -141,7 +141,7 @@ var_list_noTex :
 
 
 number : INT_NUMBER
-       | FLOAT_NUMBER
+       | AFloatNumber
        ;
 
 
@@ -293,10 +293,14 @@ expr[List<String> equations] returns [String str]	:	^(PLUS ex1=expr[equations] e
 |prim=element
 {$str=$prim.str;}
 ;
-element returns [String str]	:	
-aFloat=FLOAT_NUMBER {$str=$aFloat.text;}
 
-|anint=INT_NUMBER{$str=$anint.text;}
+
+
+
+
+element returns [String str]	:	
+anint=INT_NUMBER{$str=$anint.text;}
+|anF=AFloatNumber {$str=($anF.text.replaceAll("[eE]","*^"));}
 |^(AModelVarOrParam vn=NAME){
 if(  symtab.symbols.containsKey($vn.text)  ){
 if(symtab.symbols.get($vn.text).getType()==llVar)
