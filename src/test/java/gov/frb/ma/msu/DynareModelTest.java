@@ -21,9 +21,10 @@ public class DynareModelTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 	       String osStr=System.getProperty("os.name");
-	       System.out.println("os.name="+osStr+"<");
+	       String bStr=System.getProperty("user.dir");
+	       System.out.println("os.name="+osStr+"<"+"user.dir="+bStr+"<");
 String homeDir;
-if(osStr.equals("Linux")) homeDir="/msu/home/m1gsa00/"; else homeDir="g:/";
+homeDir=bStr;
 System.out.println("homeDir="+homeDir);
  //       dynare412Lexer lex = new dynare412Lexer(new ANTLRFileStream("./example1.mod"));
 	       dynare412Lexer lex = new dynare412Lexer(new ANTLRFileStream("./AltEx1.mod"));
