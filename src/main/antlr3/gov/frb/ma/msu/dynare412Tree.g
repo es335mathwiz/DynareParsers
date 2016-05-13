@@ -127,9 +127,9 @@ element.setInitialValue($expVal.text);}
 
 
 
-var_list returns [List<Token> nameList]:
-(nm+=NAME|nm+=NAME TEX_NAME!)+{
-$nameList=$nm;      
+var_list returns [List<Object> nameList]:
+(nmvl+=NAME|nmvl+=NAME TEX_NAME!)+{
+$nameList=$nmvl;      
         };
 
 
